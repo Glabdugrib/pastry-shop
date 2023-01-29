@@ -74,6 +74,8 @@ class Dessert extends \yii\db\ActiveRecord
 
    /**
     * Gets the discounted price and discount based on how many hours passed from the dessert creation date.
+    *
+    * @return array|null array with discounted price and discount if valid, null if expired.
     */
    public function getDiscountedData()
    {
@@ -84,7 +86,12 @@ class Dessert extends \yii\db\ActiveRecord
          return null;
       }
 
-      foreach (self::DISCOUNTS_BY_HOURS as $hours => $discount) {
+      // sort the discounts bu hours
+      $sortedDiscountsByHours = self::DISCOUNTS_BY_HOURS;
+      ksort($sortedDiscountsByHours);
+
+      // search the max discount based on how many hours passed from the dessert creation date
+      foreach ($sortedDiscountsByHours as $hours => $discount) {
          if ($shelfLife <= $hours) {
             return [
                'discount' => $discount,
@@ -96,6 +103,8 @@ class Dessert extends \yii\db\ActiveRecord
 
    /**
     * Gets the shelf life of the dessert in hours (rounded to floor).
+    *
+    * @return int
     */
    public function getShelfLife()
    {
@@ -106,7 +115,7 @@ class Dessert extends \yii\db\ActiveRecord
     * Check if the Dessert models is expired or not.
     * In case it is expired, sets the Dessert  status to "expired".
     * @param int $shelfLife in hours
-    * @return bool
+    * @return bool true if expired
     */
    public function isExpired($shelfLife)
    {

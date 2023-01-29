@@ -50,7 +50,7 @@ class DessertController extends Controller
    }
 
    /**
-    * Lists all Dessert models.
+    * Lists all active Dessert models ordered by creation date.
     *
     * @return string
     */
@@ -61,8 +61,10 @@ class DessertController extends Controller
       $discountedPrices = [];
       $discounts = [];
 
+      // checks if every dessert model is still valid or not, if yes it prepares data array for the view.
       foreach ($desserts as $dessert) {
          $discountedData = $dessert->getDiscountedData();
+         // if not expired
          if (isset($discountedData)) {
             $validDesserts[$dessert->id] = $dessert;
             $discountedPrices[$dessert->id] = $discountedData['price'];
@@ -89,6 +91,7 @@ class DessertController extends Controller
       $dessert = $this->findModel($id);
       $discountedData = $dessert->getDiscountedData();
 
+      // if not expired
       if (isset($discountedData)) {
          return $this->render('view', [
             'dessert' => $dessert,
@@ -144,6 +147,7 @@ class DessertController extends Controller
                         $ingredient->created_at = $currentTime;
                         $ingredient->updated_at = $currentTime;
                         if (!$ingredient->save()) {
+                           // if creation fail => delets Dessert model and all related Ingredients
                            $dessert->delete();
                            throw new Exception('Ingredient creation failed');
                         }
@@ -200,16 +204,18 @@ class DessertController extends Controller
 
                   if ($dessert->save()) {
 
-                     // delete removed ingredients
+                     // deletes removed ingredients
                      foreach ($dessert->ingredients as $ingredient) {
                         if (!in_array($ingredient->id, $ingredientIds)) {
                            $ingredient->delete();
                         }
                      }
 
-                     // update existing ingredients and create new ones
+                     // updates existing ingredients and create new ones
                      foreach ($ingredientsParams as $ingredientId => $ingredientParams) {
 
+                        // The request can get 2 type of keys: int or string (ex. $id or "N-$id").
+                        // The first one for already existing ingredients, the latter for the new ones.
                         if (is_integer($ingredientId)) {
                            $ingredient = Ingredient::findOne($ingredientId);
                         } else {
@@ -222,7 +228,6 @@ class DessertController extends Controller
                         $ingredient->created_at = $currentTime;
                         $ingredient->updated_at = $currentTime;
                         if (!$ingredient->save()) {
-                           $dessert->delete();
                            throw new Exception('Ingredients update failed');
                         }
                      }
@@ -266,7 +271,8 @@ class DessertController extends Controller
          }
 
          Yii::$app->session->setFlash('success', 'Dessert has been deleted successfully.');
-      } catch (Exception $ex) {
+      }
+      catch (Exception $ex) {
          Yii::$app->session->setFlash('error', 'Something went wrong. Please try again.');
       }
 
@@ -274,7 +280,7 @@ class DessertController extends Controller
    }
 
    /**
-    * Finds the Dessert model based on its primary key value.
+    * Finds the active Dessert model based on its primary key value.
     * If the model is not found, a 404 HTTP exception will be thrown.
     * @param int $id ID
     * @return Dessert the loaded model
