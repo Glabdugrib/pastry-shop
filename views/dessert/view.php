@@ -57,16 +57,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                      <?php endif; ?>
                      <?php if (!$discount == 0) : ?>
-                     <div class="datagrid-item">
-                        <div class="datagrid-title fw-bolder">Original price</div>
-                        <div class="datagrid-content">
-                           <s><?= number_format($dessert->price, 2) ?>&euro;</s>
+                        <div class="datagrid-item">
+                           <div class="datagrid-title fw-bolder">Original price</div>
+                           <div class="datagrid-content">
+                              <s><?= number_format($dessert->price, 2) ?>&euro;</s>
+                           </div>
                         </div>
-                     </div>
-                     <div class="datagrid-item">
-                        <div class="datagrid-title fw-bolder">Discount</div>
-                        <div class="datagrid-content"><?= $discount * 100 ?>%</div>
-                     </div>
+                        <div class="datagrid-item">
+                           <div class="datagrid-title fw-bolder">Discount</div>
+                           <div class="datagrid-content"><?= $discount * 100 ?>%</div>
+                        </div>
                      <?php endif; ?>
                      <div class="datagrid-item">
                         <div class="datagrid-title fw-bolder">Price</div>
@@ -84,10 +84,14 @@ $this->params['breadcrumbs'][] = $this->title;
                            <div class="datagrid-content ps-2">
                               <ul>
                                  <?php foreach ($dessert->ingredients as $ingredient) : ?>
-                                    <li class="mt-1"><?= $ingredient->name ?>: <?= $ingredient->quantity ?> <?= $ingredient->measure_unit ?></li>
+                                    <li class="mt-1"><?= $ingredient->name ?>: <?= number_format($ingredient->quantity, 2) ?> <?= $ingredient->measure_unit ?></li>
                                  <?php endforeach; ?>
                               </ul>
                            </div>
+                        <?php else : ?>
+                           <em class="text-muted">
+                              <i class="ti ti-alert-circle"></i> This dessert has no ingredients
+                           </em>
                         <?php endif; ?>
                      </div>
                   </div>

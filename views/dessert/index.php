@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
    <?php if (count($desserts) > 0) : ?>
       <div class="row row-deck row-cards">
          <?php foreach ($desserts as $dessert) : ?>
-            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-2">
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-2 position-relative">
                <a class="card shadow" href="<?= Url::to(['view', 'id' => $dessert->id]) ?>" style="color: currentColor; text-decoration: none;">
                   <div class="img-responsive img-responsive-21x9 card-img-top" style="background-image: url(https://img.itinari.com/page/content/original/d4d2f0bd-d597-481b-a384-05ccd9c585ee-istock-614978918-1.jpg?ch=DPR&dpr=2.625&w=994&s=2e620e4e260ddb41a565e51460a8387c)"></div>
                   <div class="card-header">
@@ -63,6 +63,14 @@ $this->params['breadcrumbs'][] = $this->title;
                      </div>
                   </div>
                </a>
+               <?php if (!$isGuest) : ?>
+               <a href="<?= Url::to(['update', 'id' => $dessert->id]) ?>" class="btn btn-icon btn-yellow shadow position-absolute" style="top: 1.5rem; right: 1.5rem">
+                  <i class="icon ti ti-pencil"></i>
+               </a>
+               <a href="<?= Url::to(['delete', 'id' => $dessert->id]) ?>" class="btn btn-icon btn-red shadow position-absolute" style="top: 5rem; right: 1.5rem" data-confirm="Are you sure you want to delete this item?" data-method="post">
+                  <i class="icon ti ti-trash"></i>
+               </a>
+               <?php endif; ?>
             </div>
          <?php endforeach; ?>
       </div>
