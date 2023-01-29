@@ -166,7 +166,7 @@ class DessertController extends Controller
                return $this->redirect(['index']);
             }
          } catch (Exception $e) {
-            Yii::$app->session->setFlash('error', 'Something went wrong. Please try again.');
+            Yii::$app->session->setFlash('error', $e->getMessage());
          }
       }
 
@@ -239,7 +239,8 @@ class DessertController extends Controller
                   }
                }
             } catch (Exception $ex) {
-               Yii::$app->session->setFlash('error', 'Something went wrong. Please try again.');
+               Yii::$app->session->setFlash('error', $ex->getMessage());
+
                return $this->redirect(['view', 'id' => $dessert->id]);
             }
          }
@@ -273,7 +274,8 @@ class DessertController extends Controller
          Yii::$app->session->setFlash('success', 'Dessert has been deleted successfully.');
       }
       catch (Exception $ex) {
-         Yii::$app->session->setFlash('error', 'Something went wrong. Please try again.');
+         Yii::$app->session->setFlash('error', $ex->getMessage());
+
       }
 
       return $this->redirect(['index']);
