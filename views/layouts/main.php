@@ -48,7 +48,7 @@ if (Yii::$app->user->isGuest) {
       NavBar::begin([
          'brandLabel' => Yii::$app->name,
          'brandUrl' => Yii::$app->homeUrl,
-         'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+         'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark']
       ]);
       echo Nav::widget([
          'options' => ['class' => 'navbar-nav'],
@@ -59,7 +59,7 @@ if (Yii::$app->user->isGuest) {
    </header>
 
    <main id="main" class="flex-shrink-0" role="main">
-      <div class="container">
+      <div class="container py-3 px-3 px-md-2">
          <?php if (!empty($this->params['breadcrumbs'])) : ?>
             <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
          <?php endif ?>

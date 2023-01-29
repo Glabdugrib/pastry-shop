@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,15 +18,23 @@ use yii\web\AssetBundle;
  */
 class AppAsset extends AssetBundle
 {
-    public $basePath = '@webroot';
-    public $baseUrl = '@web';
-    public $css = [
-        'css/site.css',
-    ];
-    public $js = [
-    ];
-    public $depends = [
-        'yii\web\YiiAsset',
-        'yii\bootstrap5\BootstrapAsset'
-    ];
+   public $basePath = '@webroot';
+   public $baseUrl = '';
+   public $css = [
+      'https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta16/dist/css/tabler.min.css',
+      'https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css'
+      // 'css/site.css',
+   ];
+   public $js = [
+      'https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta16/dist/js/tabler.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.map'
+      // 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js'
+   ];
+   public $jsOptions = array(
+      'position' => \yii\web\View::POS_HEAD
+  );
+   public $depends = [
+      'yii\web\YiiAsset',
+      'yii\bootstrap5\BootstrapAsset'
+   ];
 }

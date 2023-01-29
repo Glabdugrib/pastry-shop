@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use app\models\Dessert;
+use app\models\Ingredient;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -92,21 +94,40 @@ class DessertController extends Controller
     */
    public function actionCreate()
    {
-      $model = new Dessert();
+      $dessert = new Dessert();
 
       if ($this->request->isPost) {
-         if ($model->load($this->request->post())) {
+         if ($dessert->load($this->request->post())) {
             $currentTime = time();
-            $model->created_at = $currentTime;
-            $model->updated_at = $currentTime;
-            if ($model->save()) {
-               return $this->redirect(['view', 'id' => $model->id]);
+            $dessert->created_at = $currentTime;
+            $dessert->updated_at = $currentTime;
+
+            $ingredientsParams = $this->request->bodyParams['Dessert']['ingredients'] ?? [];
+
+            if ($dessert->save()) {
+               
+               // ingredient models creation
+               foreach($ingredientsParams as $ingredientParams) {
+                  $ingredient = new Ingredient();
+                  $ingredient->dessert_id = $dessert->id;
+                  $ingredient->name = $ingredientParams['name'];
+                  $ingredient->quantity = $ingredientParams['quantity'];
+                  $ingredient->measure_unit = $ingredientParams['measure_unit'];
+                  $ingredient->created_at = $currentTime;
+                  $ingredient->updated_at = $currentTime;
+                  $ingredient->save();
+               }
+
+               Yii::$app->session->setFlash('success', 'Dessert has been created successfully.');
+               return $this->redirect(['view', 'id' => $dessert->id]);
             }
+
+            Yii::$app->session->setFlash('error', 'Something went wrong. Please try again.');
          }
       }
 
       return $this->render('create', [
-         'model' => $model,
+         'model' => $dessert,
       ]);
    }
 
