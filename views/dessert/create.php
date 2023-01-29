@@ -16,10 +16,10 @@ $this->title = 'Add Dessert';
 
 <style>
    ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+   }
 </style>
 
 <div class="row">
@@ -36,6 +36,11 @@ $this->title = 'Add Dessert';
                'action' => 'create',
                'method' => 'post',
             ]); ?>
+
+            <div class="mb-3 field-dessert-quantity required">
+               <label class="form-label" for="dessert-quantity">Quantity</label>
+               <input type="number" min="1" step="1" class="form-control" name="Dessert[quantity]">
+            </div>
 
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 

@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Dessert;
 use app\models\Ingredient;
+use Exception;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -94,37 +95,65 @@ class DessertController extends Controller
     */
    public function actionCreate()
    {
-      $dessert = new Dessert();
-
       if ($this->request->isPost) {
-         if ($dessert->load($this->request->post())) {
-            $currentTime = time();
-            $dessert->created_at = $currentTime;
-            $dessert->updated_at = $currentTime;
 
-            $ingredientsParams = $this->request->bodyParams['Dessert']['ingredients'] ?? [];
+         try {
 
-            if ($dessert->save()) {
-               
-               // ingredient models creation
-               foreach($ingredientsParams as $ingredientParams) {
-                  $ingredient = new Ingredient();
-                  $ingredient->dessert_id = $dessert->id;
-                  $ingredient->name = $ingredientParams['name'];
-                  $ingredient->quantity = $ingredientParams['quantity'];
-                  $ingredient->measure_unit = $ingredientParams['measure_unit'];
-                  $ingredient->created_at = $currentTime;
-                  $ingredient->updated_at = $currentTime;
-                  $ingredient->save();
-               }
-
-               Yii::$app->session->setFlash('success', 'Dessert has been created successfully.');
-               return $this->redirect(['view', 'id' => $dessert->id]);
+            $quantity = intval( $this->request->bodyParams['Dessert']['quantity'] );
+            if ($quantity <= 0) {
+               $quantity = 1;
             }
 
+            // creates num $quantity new desserts
+            for ($i = 1; $i <= $quantity; $i++) {
+
+               $dessert = new Dessert();
+
+               if ($dessert->load($this->request->post())) {
+                  $currentTime = time();
+
+                  $dessert->created_at = $currentTime;
+                  $dessert->updated_at = $currentTime;
+
+                  $ingredientsParams = $this->request->bodyParams['Dessert']['ingredients'] ?? [];
+
+                  if ($dessert->save()) {
+
+                     // ingredient models creation
+                     foreach ($ingredientsParams as $ingredientParams) {
+                        $ingredient = new Ingredient();
+                        $ingredient->dessert_id = $dessert->id;
+                        $ingredient->name = $ingredientParams['name'];
+                        $ingredient->quantity = $ingredientParams['quantity'];
+                        $ingredient->measure_unit = $ingredientParams['measure_unit'];
+                        $ingredient->created_at = $currentTime;
+                        $ingredient->updated_at = $currentTime;
+                        if ( !$ingredient->save() ) {
+                           $dessert->delete();
+                           throw new Exception('Ingredient creation failed');
+                        }
+                     }
+                  }
+                  else {
+                     throw new Exception('Dessert creation failed');
+                  }
+               }
+            }
+
+            if ($quantity === 1) {
+               Yii::$app->session->setFlash('success', 'Dessert has been created successfully.');
+            } else {
+               Yii::$app->session->setFlash('success', 'Desserts have been created successfully.');
+            }
+            
+            return $this->redirect(['view', 'id' => $dessert->id]); 
+         }
+         catch (Exception $e) {
             Yii::$app->session->setFlash('error', 'Something went wrong. Please try again.');
          }
       }
+
+      $dessert = new Dessert();
 
       return $this->render('create', [
          'model' => $dessert,
