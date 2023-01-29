@@ -56,22 +56,11 @@ class DessertController extends Controller
     */
    public function actionIndex()
    {
-      $dataProvider = new ActiveDataProvider([
-         'query' => Dessert::find(),
-         /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-      ]);
+      $desserts = Dessert::find()->where(['status' => Dessert::STATUS_ACTIVE])->with('ingredients')->all();
 
       return $this->render('index', [
-         'dataProvider' => $dataProvider,
+         'desserts' => $desserts,
+         'isGuest' => Yii::$app->user->isGuest   
       ]);
    }
 
@@ -112,6 +101,7 @@ class DessertController extends Controller
                if ($dessert->load($this->request->post())) {
                   $currentTime = time();
 
+                  $dessert->status = Dessert::STATUS_ACTIVE;
                   $dessert->created_at = $currentTime;
                   $dessert->updated_at = $currentTime;
 
@@ -147,7 +137,7 @@ class DessertController extends Controller
                return $this->redirect(['index']);
             }
          } catch (Exception $e) {
-            Yii::$app->session->setFlash('error', 'Something went wrong. Please try again.');
+            Yii::$app->session->setFlash('error', $e->getMessage());
          }
       }
 
@@ -170,10 +160,8 @@ class DessertController extends Controller
       $dessert = $this->findModel($id);
 
       if ($this->request->isPost) {
-         // try {
+         try {
             if ($dessert->load($this->request->post())) {
-               // var_dump($this->request->bodyParams['Dessert']);
-               // die();
 
                $currentTime = time();
                $dessert->updated_at = $currentTime;
@@ -218,10 +206,10 @@ class DessertController extends Controller
                }
                
             }
-         // } catch (Exception $ex) {
-         //    Yii::$app->session->setFlash('error', $ex->getMessage());
-         //    return $this->redirect(['view', 'id' => $dessert->id]);
-         // }
+         } catch (Exception $ex) {
+            Yii::$app->session->setFlash('error', 'Something went wrong. Please try again.');
+            return $this->redirect(['view', 'id' => $dessert->id]);
+         }
       }
 
       return $this->render('update', [
@@ -230,15 +218,27 @@ class DessertController extends Controller
    }
 
    /**
-    * Deletes an existing Dessert model.
-    * If deletion is successful, the browser will be redirected to the 'index' page.
+    * Set the status of an existing Dessert model to "expired".
+    * The browser will be redirected to the 'index' page.
     * @param int $id ID
     * @return \yii\web\Response
     * @throws NotFoundHttpException if the model cannot be found
     */
    public function actionDelete($id)
    {
-      $this->findModel($id)->delete();
+      try {
+         $dessert = $this->findModel($id);
+         $dessert->status = Dessert::STATUS_EXPIRED;
+
+         if ( !$dessert->save() ) {
+            throw new Exception('Dessert delete failed');
+         }
+
+         Yii::$app->session->setFlash('success', 'Dessert has been deleted successfully.');
+      }
+      catch (Exception $ex) {
+         Yii::$app->session->setFlash('error', 'Something went wrong. Please try again.');
+      }
 
       return $this->redirect(['index']);
    }
@@ -252,7 +252,7 @@ class DessertController extends Controller
     */
    protected function findModel($id)
    {
-      $model = Dessert::find()->where(['id' => $id])->with('ingredients')->one();
+      $model = Dessert::find()->where(['id' => $id, 'status' => Dessert::STATUS_ACTIVE])->with('ingredients')->one();
 
       if (isset($model)) {
          return $model;

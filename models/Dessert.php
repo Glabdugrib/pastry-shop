@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property string $name
  * @property float $price
+ * @property int $status
  * @property int $created_at
  * @property int $updated_at
  *
@@ -17,6 +18,9 @@ use Yii;
  */
 class Dessert extends \yii\db\ActiveRecord
 {
+   const STATUS_ACTIVE = 1;
+   const STATUS_EXPIRED = 2;
+
    /**
     * {@inheritdoc}
     */
@@ -31,9 +35,9 @@ class Dessert extends \yii\db\ActiveRecord
    public function rules()
    {
       return [
-         [['name', 'price', 'created_at', 'updated_at'], 'required'],
+         [['name', 'price', 'status', 'created_at', 'updated_at'], 'required'],
          [['price'], 'number'],
-         [['created_at', 'updated_at'], 'integer'],
+         [['status', 'created_at', 'updated_at'], 'integer'],
          [['name'], 'string', 'max' => 255],
       ];
    }
