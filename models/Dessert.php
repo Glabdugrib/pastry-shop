@@ -20,6 +20,7 @@ class Dessert extends \yii\db\ActiveRecord
 {
    const STATUS_ACTIVE = 1;
    const STATUS_EXPIRED = 2;
+   const STATUS_DELETED = 3;
 
    const DISCOUNTS_BY_HOURS = [
       24 => 0,

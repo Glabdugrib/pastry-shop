@@ -264,7 +264,7 @@ class DessertController extends Controller
    {
       try {
          $dessert = $this->findModel($id);
-         $dessert->status = Dessert::STATUS_EXPIRED;
+         $dessert->status = Dessert::STATUS_DELETED;
 
          if (!$dessert->save()) {
             throw new Exception('Dessert delete failed');
