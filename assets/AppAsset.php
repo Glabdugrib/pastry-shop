@@ -28,7 +28,6 @@ class AppAsset extends AssetBundle
    public $js = [
       'https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta16/dist/js/tabler.min.js',
       'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.map'
-      // 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js'
    ];
    public $jsOptions = array(
       'position' => \yii\web\View::POS_HEAD
