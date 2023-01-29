@@ -12,6 +12,8 @@ $this->registerJsFile(
 );
 
 $this->title = 'Add Dessert';
+$this->params['breadcrumbs'][] = ['label' => 'Desserts', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <style>
@@ -23,23 +25,22 @@ $this->title = 'Add Dessert';
 </style>
 
 <div class="row">
-   <div class="col-12 col-md-6 col-xl-3">
+   <div class="col-12 col-md-6 col-xl-3 mx-auto">
 
       <div class="dessert-create">
 
-         <h1 class="mb-3"><?= Html::encode($this->title) ?></h1>
+         <h1 class="mb-4"><?= Html::encode($this->title) ?></h1>
 
          <div class="dessert-form">
 
             <?php $form = ActiveForm::begin([
-               'id' => 'form-dessert',
                'action' => 'create',
                'method' => 'post',
             ]); ?>
 
             <div class="mb-3 field-dessert-quantity required">
                <label class="form-label" for="dessert-quantity">Quantity</label>
-               <input type="number" min="1" step="1" class="form-control" name="Dessert[quantity]">
+               <input type="number" min="1" step="1" class="form-control" name="Dessert[quantity]" value="1">
             </div>
 
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
