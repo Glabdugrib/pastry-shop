@@ -27,8 +27,8 @@ $(document).ready(function () {
          .addClass('form-control')
          .attr('name', 'Dessert[ingredients][N' + $i + '][quantity]')
          .attr('placeholder', 'Insert quantity')
-         .attr('min', '0.001')
-         .attr('step', '0.001')
+         .attr('min', '0.01')
+         .attr('step', '0.01')
          .appendTo($(inputWrapper));
 
       measureUnitInput = document.createElement('input');

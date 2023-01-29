@@ -56,7 +56,7 @@ class DessertController extends Controller
     */
    public function actionIndex()
    {
-      $desserts = Dessert::find()->where(['status' => Dessert::STATUS_ACTIVE])->with('ingredients')->all();
+      $desserts = Dessert::find()->where(['status' => Dessert::STATUS_ACTIVE])->orderBy(['created_at' => SORT_ASC])->with('ingredients')->all();
       $validDesserts = [];
       $discountedPrices = [];
       $discounts = [];

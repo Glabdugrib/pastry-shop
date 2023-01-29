@@ -19,15 +19,15 @@ $this->registerMetaTag(['name' => 'description', 'content' => $this->params['met
 $this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_keywords'] ?? '']);
 $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii::getAlias('@web/favicon.ico')]);
 
-$menuItems = [
-   ['label' => 'Home', 'url' => ['/site/index']],
+$menuItemsLeft = [
    ['label' => 'Desserts', 'url' => ['/dessert/index']]
 ];
+ 
 if (Yii::$app->user->isGuest) {
-   $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+   $menuItemsRight[] = ['label' => 'Login', 'url' => ['/site/login']];
 } else {
-   $menuItems[] = ['label' => 'Add dessert', 'url' => ['/dessert/create']];
-   $menuItems[] = '<li class="nav-item">' . Html::beginForm(['/site/logout']) . Html::submitButton('Logout (' . Yii::$app->user->identity->username . ')', ['class' => 'nav-link btn btn-link logout']) . Html::endForm() . '</li>';
+   $menuItemsLeft[] = ['label' => 'Add dessert', 'url' => ['/dessert/create']];
+   $menuItemsRight[] = '<li class="nav-item">' . Html::beginForm(['/site/logout']) . Html::submitButton('Logout (' . Yii::$app->user->identity->username . ')', ['class' => 'nav-link btn-link logout']) . Html::endForm() . '</li>';
 }
 
 ?>
@@ -46,13 +46,17 @@ if (Yii::$app->user->isGuest) {
    <header id="header">
       <?php
       NavBar::begin([
-         'brandLabel' => Yii::$app->name,
-         'brandUrl' => Yii::$app->homeUrl,
+         'brandLabel' => '<i class="icon ti ti-cake me-2"></i>Pastry Shop',
+         'brandUrl' => ['//dessert/index'],
          'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark']
       ]);
       echo Nav::widget([
-         'options' => ['class' => 'navbar-nav'],
-         'items' => $menuItems
+         'options' => ['class' => 'navbar-nav ms-2 me-auto'],
+         'items' => $menuItemsLeft
+      ]);
+      echo Nav::widget([
+         'options' => ['class' => 'navbar-nav ms-2'],
+         'items' => $menuItemsRight
       ]);
       NavBar::end();
       ?>
@@ -64,7 +68,7 @@ if (Yii::$app->user->isGuest) {
             <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
          <?php endif ?>
          <?= Alert::widget() ?>
-         <?= $content ?>
+         <div class="content pt-3"><?= $content ?></div>
       </div>
    </main>
 

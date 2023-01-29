@@ -5,12 +5,15 @@ use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
 /** @var app\models\Dessert $dessert */
+/** @var float $discount */
+/** @var float $discountedPrice */
 /** @var bool $isGuest */
 
 $this->title = $dessert->name;
 $this->params['breadcrumbs'][] = ['label' => 'Desserts', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+
 ?>
 
 <div class="row">
@@ -53,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                            <div class="datagrid-content"><?= date('Y M d', $dessert->updated_at) ?></div>
                         </div>
                      <?php endif; ?>
-                     <?php if (!$discount === 0) : ?>
+                     <?php if (!$discount == 0) : ?>
                      <div class="datagrid-item">
                         <div class="datagrid-title fw-bolder">Original price</div>
                         <div class="datagrid-content">

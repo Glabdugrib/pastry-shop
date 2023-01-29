@@ -40,8 +40,6 @@ class m230128_165704_seed_user extends Migration
     */
    public function safeDown()
    {
-      echo "m230128_165704_seed_user cannot be reverted.\n";
-
       return false;
    }
 }

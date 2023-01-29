@@ -26,22 +26,21 @@ $this->params['breadcrumbs'][] = $this->title;
    <?php endif; ?>
 
    <?php if (count($desserts) > 0) : ?>
-      <div class="row row-card g-4">
+      <div class="row row-deck row-cards">
          <?php foreach ($desserts as $dessert) : ?>
-            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-               <a href="<?= Url::to(['view', 'id' => $dessert->id]) ?>" style="color: currentColor; text-decoration: none;">
-                  <div class="card shadow">
-                     <div class="img-responsive img-responsive-21x9 card-img-top" style="background-image: url(https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2F1542062283%2Fchocolate-and-cream-layer-cake-1812-cover.jpg%3Fitok%3DR_xDiShk)"></div>
-                     <div class="card-body">
-                        <h3 class="card-title"><?= $dessert->name ?></h3>
-                     </div>
-                     <div class="card-footer">
-                        <div class="datagrid" style="grid-template-columns: 1fr 1fr;">
-                           <div class="datagrid-item text-center">
-                              <div class="datagrid-title fw-bolder">Production date</div>
-                              <div class="datagrid-content"><?= date('Y M d', $dessert->created_at) ?></div>
-                           </div>
-                           <?php if (!$discounts[$dessert->id] === 0) : ?>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-2">
+               <a class="card shadow" href="<?= Url::to(['view', 'id' => $dessert->id]) ?>" style="color: currentColor; text-decoration: none;">
+                  <div class="img-responsive img-responsive-21x9 card-img-top" style="background-image: url(https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2F1542062283%2Fchocolate-and-cream-layer-cake-1812-cover.jpg%3Fitok%3DR_xDiShk)"></div>
+                  <div class="card-header">
+                     <h3 class="card-title"><?= $dessert->name ?></h3>
+                  </div>
+                  <div class="card-body">
+                     <div class="datagrid" style="grid-template-columns: 1fr 1fr;">
+                        <div class="datagrid-item text-center">
+                           <div class="datagrid-title fw-bolder">Production date</div>
+                           <div class="datagrid-content"><?= date('Y M d', $dessert->created_at) ?></div>
+                        </div>
+                        <?php if (!$discounts[$dessert->id] == 0) : ?>
                            <div class="datagrid-item text-center">
                               <div class="datagrid-title fw-bolder">Original price</div>
                               <div class="datagrid-content">
@@ -52,14 +51,13 @@ $this->params['breadcrumbs'][] = $this->title;
                               <div class="datagrid-title fw-bolder">Discount</div>
                               <div class="datagrid-content"><?= $discounts[$dessert->id] * 100 ?>%</div>
                            </div>
-                           <?php endif; ?>
-                           <div class="datagrid-item text-center">
-                              <div class="datagrid-title fw-bolder">Price</div>
-                              <div class="datagrid-content">
-                                 <span class="badge badge-outline text-teal">
-                                    <?= number_format($discountedPrices[$dessert->id], 2) ?>&euro;
-                                 </span>
-                              </div>
+                        <?php endif; ?>
+                        <div class="datagrid-item text-center">
+                           <div class="datagrid-title fw-bolder">Price</div>
+                           <div class="datagrid-content">
+                              <span class="badge badge-outline text-teal">
+                                 <?= number_format($discountedPrices[$dessert->id], 2) ?>&euro;
+                              </span>
                            </div>
                         </div>
                      </div>

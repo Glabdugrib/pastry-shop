@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = 'Update';
                      <div class="row">
                         <div class="col d-flex flex-column gap-2">
                            <input type="text" class="form-control" name="Dessert[ingredients][<?= $ingredient->id ?>][name]" placeholder="Insert ingredient name" value="<?= $ingredient->name ?>">
-                           <input type="number" class="form-control" name="Dessert[ingredients][<?= $ingredient->id ?>][quantity]" placeholder="Insert quantity" min="0.001" step="0.001" value="<?= $ingredient->quantity ?>">
+                           <input type="number" class="form-control" name="Dessert[ingredients][<?= $ingredient->id ?>][quantity]" placeholder="Insert quantity" min="0.01" step="0.01" value="<?= $ingredient->quantity ?>">
                            <input type="text" class="form-control" name="Dessert[ingredients][<?= $ingredient->id ?>][measure_unit]" placeholder="Insert measure unit" value="<?= $ingredient->measure_unit ?>">
                         </div>
                         <div class="col-auto d-flex align-items-center">
