@@ -73,7 +73,8 @@ class DessertController extends Controller
    public function actionView($id)
    {
       return $this->render('view', [
-         'model' => $this->findModel($id),
+         'dessert' => $this->findModel($id),
+         'isGuest' => Yii::$app->user->isGuest 
       ]);
    }
 
