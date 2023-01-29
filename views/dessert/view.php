@@ -25,9 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
          <?php if (!$isGuest) : ?>
             <p class="mb-4">
-               <?= Html::a('Update', ['update', 'id' => $dessert->id], ['class' => 'btn btn-primary']) ?>
-               <?= Html::a('Delete', ['delete', 'id' => $dessert->id], [
-                  'class' => 'btn btn-danger',
+               <?= Html::a('<i class="icon ti ti-pencil me-2"></i>Update', ['update', 'id' => $dessert->id], ['class' => 'btn btn-outline-yellow']) ?>
+               <?= Html::a('<i class="icon ti ti-trash me-2"></i>Delete', ['delete', 'id' => $dessert->id], [
+                  'class' => 'btn btn-outline-danger',
                   'data' => [
                      'confirm' => 'Are you sure you want to delete this item?',
                      'method' => 'post',
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
          <div class="dessert-form">
 
             <div class="card shadow">
-               <div class="img-responsive img-responsive-21x9 card-img-top" style="background-image: url(https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fimg1.cookinglight.timeinc.net%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2F1542062283%2Fchocolate-and-cream-layer-cake-1812-cover.jpg%3Fitok%3DR_xDiShk)"></div>
+               <div class="img-responsive img-responsive-21x9 card-img-top" style="background-image: url(https://img.itinari.com/page/content/original/d4d2f0bd-d597-481b-a384-05ccd9c585ee-istock-614978918-1.jpg?ch=DPR&dpr=2.625&w=994&s=2e620e4e260ddb41a565e51460a8387c)"></div>
                <div class="card-header">
                   <h3 class="card-title"><?= $dessert->name ?></h3>
                </div>

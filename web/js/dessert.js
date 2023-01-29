@@ -50,7 +50,7 @@ $(document).ready(function () {
          });
 
       deleteIcon = document.createElement('i');
-      $(deleteIcon).addClass('ti ti-trash')
+      $(deleteIcon).addClass('icon ti ti-trash')
       .appendTo($(deleteBtn));
    });
 

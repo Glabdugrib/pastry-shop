@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = 'Update';
             <div class="mb-3 field-dessert-ingredients required">
                <div class="d-flex justify-content-between align-items-center mb-2">
                   <label class="form-label" for="dessert-ingredients">Ingredients</label>
-                  <div id="add-ingredient" class="btn btn-icon btn-primary">
+                  <div id="add-ingredient" class="btn btn-icon btn-outline-primary">
                      <i class="icon ti ti-plus"></i>
                   </div>
                </div>
@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = 'Update';
                         </div>
                         <div class="col-auto d-flex align-items-center">
                            <button class="delete-ingredient btn btn-icon btn-outline-danger">
-                              <i class="ti ti-trash"></i>
+                              <i class="icon ti ti-trash"></i>
                            </button>
                         </div>
                      </div>

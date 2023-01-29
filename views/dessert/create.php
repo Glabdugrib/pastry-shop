@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="mb-3 field-dessert-ingredients required">
                <div class="d-flex justify-content-between align-items-center mb-2">
                   <label class="form-label" for="dessert-ingredients">Ingredients</label>
-                  <div id="add-ingredient" class="btn btn-icon btn-primary">
+                  <div id="add-ingredient" class="btn btn-icon btn-outline-primary">
                      <i class="icon ti ti-plus"></i>
                   </div>
                </div>
