@@ -53,6 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                            <div class="datagrid-content"><?= date('Y M d', $dessert->updated_at) ?></div>
                         </div>
                      <?php endif; ?>
+                     <?php if (!$discount === 0) : ?>
                      <div class="datagrid-item">
                         <div class="datagrid-title fw-bolder">Original price</div>
                         <div class="datagrid-content">
@@ -61,13 +62,14 @@ $this->params['breadcrumbs'][] = $this->title;
                      </div>
                      <div class="datagrid-item">
                         <div class="datagrid-title fw-bolder">Discount</div>
-                        <div class="datagrid-content">10%</div>
+                        <div class="datagrid-content"><?= $discount * 100 ?>%</div>
                      </div>
+                     <?php endif; ?>
                      <div class="datagrid-item">
                         <div class="datagrid-title fw-bolder">Price</div>
                         <div class="datagrid-content">
                            <span class="badge badge-outline text-teal">
-                              <?= number_format($dessert->price, 2) ?>&euro;
+                              <?= number_format($discountedPrice, 2) ?>&euro;
                            </span>
                         </div>
                      </div>

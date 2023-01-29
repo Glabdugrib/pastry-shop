@@ -57,10 +57,24 @@ class DessertController extends Controller
    public function actionIndex()
    {
       $desserts = Dessert::find()->where(['status' => Dessert::STATUS_ACTIVE])->with('ingredients')->all();
+      $validDesserts = [];
+      $discountedPrices = [];
+      $discounts = [];
+
+      foreach ($desserts as $dessert) {
+         $discountedData = $dessert->getDiscountedData();
+         if (isset($discountedData)) {
+            $validDesserts[$dessert->id] = $dessert;
+            $discountedPrices[$dessert->id] = $discountedData['price'];
+            $discounts[$dessert->id] = $discountedData['discount'];
+         }
+      }
 
       return $this->render('index', [
-         'desserts' => $desserts,
-         'isGuest' => Yii::$app->user->isGuest   
+         'desserts' => $validDesserts,
+         'discountedPrices' => $discountedPrices,
+         'discounts' => $discounts,
+         'isGuest' => Yii::$app->user->isGuest
       ]);
    }
 
@@ -72,10 +86,20 @@ class DessertController extends Controller
     */
    public function actionView($id)
    {
-      return $this->render('view', [
-         'dessert' => $this->findModel($id),
-         'isGuest' => Yii::$app->user->isGuest 
-      ]);
+      $dessert = $this->findModel($id);
+      $discountedData = $dessert->getDiscountedData();
+
+      if (isset($discountedData)) {
+         return $this->render('view', [
+            'dessert' => $dessert,
+            'discountedPrice' => $discountedData['price'],
+            'discount' => $discountedData['discount'],
+            'isGuest' => Yii::$app->user->isGuest
+         ]);
+      }
+
+      Yii::$app->session->setFlash('error', 'The dessert is expired.');
+      $this->redirect(['index']);
    }
 
    /**
@@ -138,7 +162,7 @@ class DessertController extends Controller
                return $this->redirect(['index']);
             }
          } catch (Exception $e) {
-            Yii::$app->session->setFlash('error', $e->getMessage());
+            Yii::$app->session->setFlash('error', 'Something went wrong. Please try again.');
          }
       }
 
@@ -160,62 +184,68 @@ class DessertController extends Controller
    {
       $dessert = $this->findModel($id);
 
-      if ($this->request->isPost) {
-         try {
-            if ($dessert->load($this->request->post())) {
+      $discountedData = $dessert->getDiscountedData();
 
-               $currentTime = time();
-               $dessert->updated_at = $currentTime;
+      if (isset($discountedData)) {
 
-               $ingredientsParams = $this->request->bodyParams['Dessert']['ingredients'] ?? [];
-               $ingredientIds = array_keys($ingredientsParams);
+         if ($this->request->isPost) {
+            try {
+               if ($dessert->load($this->request->post())) {
 
-               if ($dessert->save()) {
+                  $currentTime = time();
+                  $dessert->updated_at = $currentTime;
 
-                  // delete removed ingredients
-                  foreach ($dessert->ingredients as $ingredient) {
-                     if (!in_array($ingredient->id, $ingredientIds)) {
-                        $ingredient->delete();
+                  $ingredientsParams = $this->request->bodyParams['Dessert']['ingredients'] ?? [];
+                  $ingredientIds = array_keys($ingredientsParams);
+
+                  if ($dessert->save()) {
+
+                     // delete removed ingredients
+                     foreach ($dessert->ingredients as $ingredient) {
+                        if (!in_array($ingredient->id, $ingredientIds)) {
+                           $ingredient->delete();
+                        }
                      }
+
+                     // update existing ingredients and create new ones
+                     foreach ($ingredientsParams as $ingredientId => $ingredientParams) {
+
+                        if (is_integer($ingredientId)) {
+                           $ingredient = Ingredient::findOne($ingredientId);
+                        } else {
+                           $ingredient = new Ingredient();
+                        }
+                        $ingredient->dessert_id = $dessert->id;
+                        $ingredient->name = $ingredientParams['name'];
+                        $ingredient->quantity = $ingredientParams['quantity'];
+                        $ingredient->measure_unit = $ingredientParams['measure_unit'];
+                        $ingredient->created_at = $currentTime;
+                        $ingredient->updated_at = $currentTime;
+                        if (!$ingredient->save()) {
+                           $dessert->delete();
+                           throw new Exception('Ingredients update failed');
+                        }
+                     }
+
+                     Yii::$app->session->setFlash('success', 'Dessert has been updated successfully.');
+                     return $this->redirect(['view', 'id' => $dessert->id]);
+                  } else {
+                     throw new Exception('Dessert update failed');
                   }
-
-                  // update existing ingredients and create new ones
-                  foreach ($ingredientsParams as $ingredientId => $ingredientParams) {
-
-                     if (is_integer($ingredientId)) {
-                        $ingredient = Ingredient::findOne($ingredientId);
-                     } else {
-                        $ingredient = new Ingredient();
-                     }
-                     $ingredient->dessert_id = $dessert->id;
-                     $ingredient->name = $ingredientParams['name'];
-                     $ingredient->quantity = $ingredientParams['quantity'];
-                     $ingredient->measure_unit = $ingredientParams['measure_unit'];
-                     $ingredient->created_at = $currentTime;
-                     $ingredient->updated_at = $currentTime;
-                     if (!$ingredient->save()) {
-                        $dessert->delete();
-                        throw new Exception('Ingredients update failed');
-                     }
-                  }
-
-                  Yii::$app->session->setFlash('success', 'Dessert has been updated successfully.');
-                  return $this->redirect(['view', 'id' => $dessert->id]);
                }
-               else {
-                  throw new Exception('Dessert update failed');
-               }
-               
+            } catch (Exception $ex) {
+               Yii::$app->session->setFlash('error', 'Something went wrong. Please try again.');
+               return $this->redirect(['view', 'id' => $dessert->id]);
             }
-         } catch (Exception $ex) {
-            Yii::$app->session->setFlash('error', 'Something went wrong. Please try again.');
-            return $this->redirect(['view', 'id' => $dessert->id]);
          }
+
+         return $this->render('update', [
+            'model' => $dessert,
+         ]);
       }
 
-      return $this->render('update', [
-         'model' => $dessert,
-      ]);
+      Yii::$app->session->setFlash('error', 'The dessert is expired.');
+      $this->redirect(['index']);
    }
 
    /**
@@ -231,13 +261,12 @@ class DessertController extends Controller
          $dessert = $this->findModel($id);
          $dessert->status = Dessert::STATUS_EXPIRED;
 
-         if ( !$dessert->save() ) {
+         if (!$dessert->save()) {
             throw new Exception('Dessert delete failed');
          }
 
          Yii::$app->session->setFlash('success', 'Dessert has been deleted successfully.');
-      }
-      catch (Exception $ex) {
+      } catch (Exception $ex) {
          Yii::$app->session->setFlash('error', 'Something went wrong. Please try again.');
       }
 

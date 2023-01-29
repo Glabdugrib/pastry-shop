@@ -6,11 +6,15 @@ use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 /** @var app\models\Dessert[] $desserts */
+/** @var array $discountedPrices */
+/** @var array $discounts */
 /** @var bool $isGuest */
 
 $this->title = 'Desserts';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
+
 <div class="dessert-index">
 
    <h1 class="mb-3"><?= Html::encode($this->title) ?></h1>
@@ -37,6 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                               <div class="datagrid-title fw-bolder">Production date</div>
                               <div class="datagrid-content"><?= date('Y M d', $dessert->created_at) ?></div>
                            </div>
+                           <?php if (!$discounts[$dessert->id] === 0) : ?>
                            <div class="datagrid-item text-center">
                               <div class="datagrid-title fw-bolder">Original price</div>
                               <div class="datagrid-content">
@@ -45,13 +50,14 @@ $this->params['breadcrumbs'][] = $this->title;
                            </div>
                            <div class="datagrid-item text-center">
                               <div class="datagrid-title fw-bolder">Discount</div>
-                              <div class="datagrid-content">0%</div>
+                              <div class="datagrid-content"><?= $discounts[$dessert->id] * 100 ?>%</div>
                            </div>
+                           <?php endif; ?>
                            <div class="datagrid-item text-center">
                               <div class="datagrid-title fw-bolder">Price</div>
                               <div class="datagrid-content">
                                  <span class="badge badge-outline text-teal">
-                                    <?= number_format($dessert->price, 2) ?>&euro;
+                                    <?= number_format($discountedPrices[$dessert->id], 2) ?>&euro;
                                  </span>
                               </div>
                            </div>
