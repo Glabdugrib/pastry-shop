@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                      <h3 class="card-title"><?= $dessert->name ?></h3>
                   </div>
                   <div class="card-body">
-                     <div class="datagrid" style="grid-template-columns: 1fr 1fr;">
+                     <div class="datagrid fs-3" style="grid-template-columns: 1fr 1fr;">
                         <div class="datagrid-item text-center">
                            <div class="datagrid-title fw-bolder">Production date</div>
                            <div class="datagrid-content"><?= date('Y M d', $dessert->created_at) ?></div>

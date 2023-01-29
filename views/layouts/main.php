@@ -46,16 +46,16 @@ if (Yii::$app->user->isGuest) {
    <header id="header">
       <?php
       NavBar::begin([
-         'brandLabel' => '<i class="icon ti ti-cake me-2"></i>Pastry Shop',
+         'brandLabel' => '<i class="ti ti-cake me-2 fs-1"></i><span class="fs-3 me-3">Pastry Shop</span>',
          'brandUrl' => ['//dessert/index'],
          'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark']
       ]);
       echo Nav::widget([
-         'options' => ['class' => 'navbar-nav ms-2 me-auto'],
+         'options' => ['class' => 'navbar-nav ms-2 me-auto fs-3'],
          'items' => $menuItemsLeft
       ]);
       echo Nav::widget([
-         'options' => ['class' => 'navbar-nav ms-2'],
+         'options' => ['class' => 'navbar-nav ms-2 fs-3'],
          'items' => $menuItemsRight
       ]);
       NavBar::end();
@@ -75,8 +75,8 @@ if (Yii::$app->user->isGuest) {
    <footer id="footer" class="mt-auto py-3 bg-light">
       <div class="container">
          <div class="row text-muted">
-            <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
-            <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
+            <div class="col-md-6 text-center text-md-start">&copy; Simone Sada 2023 Jan 29</div>
+            <div class="col-md-6 text-center text-md-end"><?= 'Powered with Yii2, jQuery, Bootstrap 5 and Tabler' ?></div>
          </div>
       </div>
    </footer>

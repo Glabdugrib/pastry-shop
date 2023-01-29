@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                </div>
                <div class="card-body">
 
-                  <div class="datagrid mb-4" style="grid-template-columns:  1fr 1fr;">
+                  <div class="datagrid fs-3 mb-4" style="grid-template-columns:  1fr 1fr;">
                      <div class="datagrid-item">
                         <div class="datagrid-title fw-bolder">Production date</div>
                         <div class="datagrid-content"><?= date('Y M d', $dessert->created_at) ?></div>
@@ -77,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                      </div>
                   </div>
-                  <div class="datagrid">
+                  <div class="datagrid fs-3">
                      <div class="datagrid-item">
                         <div class="datagrid-title fw-bolder">Ingredients</div>
                         <?php if (count($dessert->ingredients) > 0) : ?>
